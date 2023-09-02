@@ -1,0 +1,16 @@
+﻿{
+  "ManifestVersion": 1,
+
+  "Id": "WPS.FileDialog",
+  "PluginType": "FileAppPlugin",
+  "PluginVersion": "0.1.0",
+  "DisplayName": "WPS File Dialog",
+  "Authors": [ "Listary" ],
+  "Description": "Listary file application plugin for WPS's file dialog.",
+  "Homepage": "https://github.com/listary/Listary.FileAppPlugin.WPS",
+  "Icon": "Icon.png",
+
+  "Api": "NetFramework",
+  "ApiVersion": 1,
+  "Entry": "Listary.FileAppPlugin.WPS.FileDialog.dll"
+}
