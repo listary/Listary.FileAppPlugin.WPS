@@ -10,7 +10,7 @@ using FlaUI.Core.Input;
 
 namespace Listary.FileAppPlugin.WPS.FileDialog
 {
-    public class FileDialogTab : IFileTab, IOpenFolder
+    public class FileDialogTab : IFileTab, IOpenFolder, IOpenFile
     {
         private readonly IFileAppPluginHost _host;
         private readonly TextBox _fileNameEdit;
@@ -38,7 +38,7 @@ namespace Listary.FileAppPlugin.WPS.FileDialog
             }
         }
 
-        public async Task<bool> OpenFolder(string path)
+        private async Task<bool> SetFileNameAndEnter(string path)
         {
             if (_fileNameEdit != null)
             {
@@ -60,6 +60,16 @@ namespace Listary.FileAppPlugin.WPS.FileDialog
                 }
             }
             return false;
+        }
+
+        public Task<bool> OpenFolder(string path)
+        {
+            return SetFileNameAndEnter(path);
+        }
+
+        public Task<bool> OpenFile(string path)
+        {
+            return SetFileNameAndEnter(path);
         }
     }
 }
