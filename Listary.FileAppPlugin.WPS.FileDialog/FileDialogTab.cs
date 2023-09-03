@@ -13,11 +13,13 @@ namespace Listary.FileAppPlugin.WPS.FileDialog
     public class FileDialogTab : IFileTab, IOpenFolder, IOpenFile
     {
         private readonly IFileAppPluginHost _host;
+        private readonly AutomationElement _kcfdFileDialog;
         private readonly TextBox _fileNameEdit;
 
         public FileDialogTab(IFileAppPluginHost host, AutomationElement kcfdFileDialog)
         {
             _host = host;
+            _kcfdFileDialog = kcfdFileDialog;
 
             var kcfdFilterWidget = kcfdFileDialog.FindFirstDescendant(cf => cf.ByClassName("KcfdFilterWidget"));
             if (kcfdFilterWidget == null)
@@ -45,6 +47,9 @@ namespace Listary.FileAppPlugin.WPS.FileDialog
                 try
                 {
                     _fileNameEdit.Text = path;
+
+                    // Set the file dialog as the foreground window
+                    _kcfdFileDialog.Focus();
 
                     _fileNameEdit.Focus();
                     Keyboard.Type(VirtualKeyShort.RETURN);
