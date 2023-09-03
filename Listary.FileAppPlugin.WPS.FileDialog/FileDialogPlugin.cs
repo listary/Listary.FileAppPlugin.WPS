@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using FlaUI.Core.AutomationElements;
 using FlaUI.UIA3;
+using Microsoft.Extensions.Logging;
 
 namespace Listary.FileAppPlugin.WPS.FileDialog
 {
@@ -31,11 +32,22 @@ namespace Listary.FileAppPlugin.WPS.FileDialog
             if (Win32Utils.GetProcessPathFromHwnd(hWnd).EndsWith("\\wps.exe", StringComparison.OrdinalIgnoreCase))
             {
                 // It is WPS's file dialog?
-                var automation = new UIA3Automation();
-                AutomationElement kcfdFileDialog = automation.FromHandle(hWnd);
-                if (kcfdFileDialog.ClassName == "KcfdFileDialog")
+                try
                 {
-                    return new FileDialogWindow(_host, hWnd, automation, kcfdFileDialog);
+                    var automation = new UIA3Automation();
+                    AutomationElement kcfdFileDialog = automation.FromHandle(hWnd);
+                    if (kcfdFileDialog.ClassName == "KcfdFileDialog")
+                    {
+                        return new FileDialogWindow(_host, hWnd, automation, kcfdFileDialog);
+                    }
+                }
+                catch (TimeoutException e)
+                {
+                    _host.Logger.LogWarning($"UIA timeout: {e}");
+                }
+                catch (Exception e)
+                {
+                    _host.Logger.LogError($"Failed to bind window: {e}");
                 }
             }
             return null;
