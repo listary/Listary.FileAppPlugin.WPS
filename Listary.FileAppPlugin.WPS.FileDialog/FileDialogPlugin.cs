@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using FlaUI.Core.AutomationElements;
@@ -29,7 +30,8 @@ namespace Listary.FileAppPlugin.WPS.FileDialog
         public IFileWindow BindFileWindow(IntPtr hWnd)
         {
             // It is from WPS?
-            if (Win32Utils.GetProcessPathFromHwnd(hWnd).EndsWith("\\wps.exe", StringComparison.OrdinalIgnoreCase))
+            string processName = Path.GetFileName(Win32Utils.GetProcessPathFromHwnd(hWnd)).ToLowerInvariant();
+            if (processName is "wps.exe" or "et.exe" or "wpp.exe" or "wpspdf.exe")
             {
                 // It is WPS's file dialog?
                 try
