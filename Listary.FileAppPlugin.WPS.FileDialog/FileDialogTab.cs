@@ -30,8 +30,14 @@ namespace Listary.FileAppPlugin.WPS.FileDialog
 
             _fileNameEdit = kcfdFilterWidget
                 .FindAllChildren(cf => cf.ByClassName("KcfdComboBox"))
-                .Select(kcfdComboBox => kcfdComboBox.FindFirstChild(cf => cf.ByClassName("QLineEdit")))
-                .FirstOrDefault(qLineEdit => qLineEdit != null)
+                .Select(kcfdComboBox => 
+                {
+                    var qLineEdit = kcfdComboBox.FindFirstChild(cf => cf.ByClassName("QLineEdit"));
+                    if (qLineEdit != null) return qLineEdit;
+                    
+                    return kcfdComboBox.FindFirstChild(cf => cf.ByClassName("kd::KDTextField"));
+                })
+                .FirstOrDefault(editor => editor != null)
                 ?.AsTextBox();
             if (_fileNameEdit == null)
             {
